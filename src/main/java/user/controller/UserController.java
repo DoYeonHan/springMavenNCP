@@ -31,7 +31,7 @@ public class UserController {
 	@Autowired
 	private ObjectStorageService objectStorageService;
 	
-	private String bucketName = "bitcamp-edu-bucket-92";
+	private String bucketName = "bitcamp-edu-bucket-115";
 	
 	@GetMapping(value = "uploadForm")
 	public String uploadForm() {

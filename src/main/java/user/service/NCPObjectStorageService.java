@@ -19,52 +19,43 @@ import spring.conf.NaverConfiguration;
 
 @Service
 public class NCPObjectStorageService implements ObjectStorageService {
-
-	final AmazonS3 s3;
-	
-	public NCPObjectStorageService(NaverConfiguration naverConfiguration) {
-		s3 = AmazonS3ClientBuilder
-				.standard()
-				.withEndpointConfiguration(
-						new AwsClientBuilder
-							.EndpointConfiguration(naverConfiguration.getEndPoint(),
-									naverConfiguration.getRegionName())
-				)
-				.withCredentials(new AWSStaticCredentialsProvider(
-									new BasicAWSCredentials(naverConfiguration.getAccessKey(),
-															naverConfiguration.getSecretKey())
-									)
-				)
-				.build();
-	}
-	
-	@Override
-	public String uploadFile(String bucketName, String directoryPath, MultipartFile img) {
-		if(img.isEmpty()) return null;
-		
-		try(InputStream fileIn = img.getInputStream()) {
-			//String fileName = img.getOriginalFilename();
-			String fileName = UUID.randomUUID().toString();
-			
-			ObjectMetadata objectMetadata = new ObjectMetadata();
-			objectMetadata.setContentType(img.getContentType());
-			
-			PutObjectRequest objectRequest =
-					new PutObjectRequest(bucketName,
-										 directoryPath + fileName,
-										 fileIn,
-										 objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead);
-			
-			s3.putObject(objectRequest);
-			
-			return fileName;
-			
-		} catch (Exception e) {
-			throw new RuntimeException("파일 업로드 오류", e);
-		}
-		
-		
-		
-	}
+   final AmazonS3 s3;
+   
+   public NCPObjectStorageService(NaverConfiguration naverConfiguration) {
+         s3 = AmazonS3ClientBuilder
+               .standard()
+               .withEndpointConfiguration(
+                     new AwsClientBuilder
+                        .EndpointConfiguration(naverConfiguration.getEndPoint(),
+                              naverConfiguration.getRegionName())
+               )
+               .withCredentials(new AWSStaticCredentialsProvider(
+                              new BasicAWSCredentials(naverConfiguration.getAccessKey(),naverConfiguration.getSecretKey())
+                     ) 
+                  ).build();
+      }
+   @Override
+   public String uploadFile(String bucketName, String directoryPath, MultipartFile img) {
+      if(img.isEmpty()) return null;
+         
+         try(InputStream fileIn = img.getInputStream()) {
+            
+            String fileName = UUID.randomUUID().toString();
+            
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(img.getContentType());
+            
+            PutObjectRequest objectRequest =
+                  new PutObjectRequest(bucketName, directoryPath + fileName , fileIn,
+                        objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead);
+            s3.putObject(objectRequest);
+            
+            return fileName;
+            
+            
+         } catch (Exception e) {
+            throw new RuntimeException("파일 업로드 오류", e);//강제 exception
+         }
+   }
 
 }
