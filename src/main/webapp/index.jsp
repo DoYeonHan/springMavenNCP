@@ -9,5 +9,7 @@
 <body>
 	<button onclick="location.href='/springMavenNCP/user/uploadForm'">업로드</button>
 	<button onclick="location.href='/springMavenNCP/user/uploadList'">목록</button>
+	<button onclick="location.href='/springMavenNCP/user/uploadList'">수정</button>
+	<button onclick="location.href='/springMavenNCP/user/uploadList'">삭제</button>
 </body>
 </html>
