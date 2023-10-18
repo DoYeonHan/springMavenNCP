@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="user.dao.UserDAO">
+ 	
+ 	<!-- SQL을 실행할 때 넘어오는 파라미터 타입이 List일 경우
+ 		foreach 태그의 collection 속성에 사용할 수 있는 파라미터 이름은
+ 		list 또는 collection이 가능하다. -->
+ 	<insert id="upload">
+ 		insert into userimage(imageName, imageContent, imageFileName, imageOriginalName)
+ 		values
+ 		<foreach collection="list" item="dto" separator=",">
+ 			(#{dto.imageName}, #{dto.imageContent}, #{dto.imageFileName}, #{dto.imageOriginalName})
+ 		</foreach>
+ 	</insert>
+ 	
+ 	<select id="getUploadList" resultType="user.bean.UserImageDTO">
+ 		select * from userimage order by seq desc
+ 	</select>
+ 	
+ </mapper>
